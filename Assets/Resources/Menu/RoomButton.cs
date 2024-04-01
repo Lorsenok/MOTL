@@ -7,7 +7,7 @@ public class RoomButton : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI text;
 
-    private RoomInfo roomInfo;
+    public RoomInfo roomInfo;
 
     public void SetUp(RoomInfo info)
     {

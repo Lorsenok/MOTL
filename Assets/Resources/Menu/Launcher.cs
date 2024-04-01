@@ -16,6 +16,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject roomListPrefab;
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject playerListPrefab;
+    [SerializeField] GameObject startGameButton;
 
     public void Awake()
     {
@@ -32,6 +33,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to master");
         PhotonNetwork.JoinLobby();
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnJoinedLobby()
@@ -66,12 +68,24 @@ public class Launcher : MonoBehaviourPunCallbacks
         roomName.text = PhotonNetwork.CurrentRoom.Name;
         PhotonNetwork.NickName = "Player" + Random.Range(-1000, 1000);
 
+        foreach (Transform child in playerListContent)
+        {
+            Destroy(child.gameObject);
+        }
+
         Player[] players = PhotonNetwork.PlayerList;
 
         for (int i = 0; i < players.Length; i++)
         {
             Instantiate(playerListPrefab, playerListContent).GetComponent<PlayerText>().SetUp(players[i]);
         }
+
+        startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        startGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -102,13 +116,25 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach (Transform t in roomListContent) { Destroy(t); }
-        for (int i = 0; i < roomList.Count; i++){ Instantiate(roomListPrefab, roomListContent).GetComponent<RoomButton>().SetUp(roomList[i]); }
+        foreach (Transform t in roomListContent) 
+        { 
+            Destroy(t); 
+        }
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            if (roomList[i].RemovedFromList) continue;
+            Instantiate(roomListPrefab, roomListContent).GetComponent<RoomButton>().SetUp(roomList[i]); 
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Instantiate(playerListPrefab, playerListContent).GetComponent<PlayerText>().SetUp(newPlayer);
+    }
+
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel("TestMap");
     }
 
     public void Exit()
