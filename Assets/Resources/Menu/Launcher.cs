@@ -92,6 +92,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         logText.GetComponent<LogText>().Message(message);
         Debug.Log(returnCode);
+        MenuManager.Instance.MenuOpen("title");
     }
 
     public void JoinRoom(RoomInfo info)
