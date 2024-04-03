@@ -5,28 +5,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    
-    [SerializeField] private GameObject cameraHolder;
 
-    [SerializeField] private float sensitivity;
-    [SerializeField] private float speed;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float smoothTime;
+    [SerializeField] public float sensitivity;
+    [SerializeField] public float gravity;
+    [SerializeField] public float speed;
+    [SerializeField] public float jumpHeight;
 
-    [SerializeField] private bool isGrounded;
+    private bool isGrounded;
 
-    private float verticalLookRotation;
-
-    private Vector3 smoothMoveVelocity;
-    private Vector3 moveAmount;
-
+    private GameObject cam;
     private Rigidbody rg;
+    private CharacterController characterController;
+
     private PhotonView photonView;
 
     private void Awake()
     {
         rg = GetComponent<Rigidbody>();
         photonView = GetComponent<PhotonView>();
+        cam = GetComponentInChildren<Camera>().gameObject;
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Start()
@@ -36,12 +34,12 @@ public class PlayerController : MonoBehaviour
             Destroy(GetComponentInChildren<Camera>());
             Destroy(rg);
         }
-        SetCursorVisible(false);
     }
 
     public void SetCursorVisible(bool visible)
     {
         Cursor.visible = visible;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void SetGroundedState(bool state)
@@ -49,43 +47,42 @@ public class PlayerController : MonoBehaviour
         isGrounded = state;
     }
 
+    private float xRotation = 0f;
     private void look()
     {
-        transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * sensitivity);
+        xRotation -= Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        verticalLookRotation += Input.GetAxisRaw("Mouse Y") * sensitivity;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
-
-        cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+        cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * (Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime));
     }
 
+    [SerializeField] private Vector3 velocity;
     private void move()
     {
-        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        characterController.Move((transform.right * Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") * transform.forward) * speed * Time.deltaTime);
 
-        moveAmount = Vector3.Lerp(moveAmount, moveDir * speed, smoothTime*Time.deltaTime);
+        if (isGrounded && !Input.GetKey(KeyCode.Space)) velocity = new Vector3(0, -2, 0);
+        else velocity.y += Time.deltaTime * gravity;
+
+        characterController.Move(velocity * Time.deltaTime);
     }
 
     private void jump()
     {
         if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
-            rg.AddForce(transform.up * jumpForce);
+            velocity = new Vector3(velocity.x, Mathf.Sqrt(jumpHeight * -2 * gravity), velocity.z);
         }
     }
 
     private void Update()
     {
         if (!photonView.IsMine) return;
+        SetCursorVisible(false);
         look();
-        move();
         jump();
-    }
-
-    private void FixedUpdate()
-    {
-        if (!photonView.IsMine) return;
-        rg.MovePosition(rg.position + transform.TransformDirection(moveAmount) * Time.deltaTime);
+        move();
     }
 
 }
