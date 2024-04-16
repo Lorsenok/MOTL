@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class WeaponSetup : MonoBehaviour
 {
@@ -23,7 +22,7 @@ public class WeaponSetup : MonoBehaviour
 
     [SerializeField] private LogText logText;
 
-    public float PointsMax = 100;
+    [SerializeField] private float PointsMax = 100;
     private float points;
 
     public void Awake()
@@ -45,13 +44,13 @@ public class WeaponSetup : MonoBehaviour
         if (points > 0)
         {
             WeaponData.Damage = damageSlider.value;
-            WeaponData.Recoil = recoilSlider.value;
+            WeaponData.Recoil = (recoilSlider.maxValue + recoilSlider.minValue - recoilSlider.value);
             WeaponData.Aim = aimSlider.value;
             WeaponData.Size = sizeSlider.value;
-            WeaponData.ReloadTimeMax = reloadSlider.value;
+            WeaponData.ReloadTimeMax = (reloadSlider.maxValue + reloadSlider.minValue - reloadSlider.value);
             WeaponData.AmmoMax = ammoSlider.value;
 
-            if (redInputField.text != string.Empty && greenInputField.text != string.Empty && blueInputField.text != string.Empty)
+            if (redInputField.text != string.Empty & greenInputField.text != string.Empty & blueInputField.text != string.Empty)
             {
                 WeaponData.LaserColor = new Color(float.Parse(redInputField.text) / 255, float.Parse(greenInputField.text) / 255, float.Parse(blueInputField.text) / 255);
             }
@@ -93,10 +92,10 @@ public class WeaponSetup : MonoBehaviour
         pointsText.text = "Points left: " + Mathf.Round(points).ToString();
 
         damageSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Damage (" + damageSlider.value.ToString() + " per sec)";
-        recoilSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Recoil (" + recoilSlider.value.ToString() + ")";
+        recoilSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Recoil (" + (recoilSlider.maxValue + recoilSlider.minValue - recoilSlider.value).ToString() + ")";
         aimSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Aim (" + aimSlider.value.ToString() + ")";
         sizeSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Size (" + sizeSlider.value.ToString() + ")";
-        reloadSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Reload Time (" + (10 - reloadSlider.value).ToString() + " sec)";
+        reloadSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Reload Time (" + (reloadSlider.maxValue + reloadSlider.minValue - reloadSlider.value).ToString() + " sec)";
         ammoSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Ammo (" + ammoSlider.value.ToString() + " sec)";
     }
 }
