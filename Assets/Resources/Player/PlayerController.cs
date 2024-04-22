@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController characterController;
 
     private PhotonView photonView;
+
+    public bool canMove = true;
 
     private void Awake()
     {
@@ -62,11 +65,6 @@ public class PlayerController : MonoBehaviour
     private void move()
     {
         characterController.Move((transform.right * Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") * transform.forward) * Speed * Time.deltaTime);
-
-        if (isGrounded && !Input.GetKey(KeyCode.Space)) velocity = new Vector3(0, -2, 0);
-        else velocity.y += Time.deltaTime * Gravity;
-
-        characterController.Move(velocity * Time.deltaTime);
     }
 
     private void jump()
@@ -77,18 +75,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PushBack(float _velocity)
+    public void Push(float _velocity, Vector3 direction)
     {
-        characterController.Move(-transform.forward.normalized * _velocity * Time.deltaTime);
+        characterController.Move(direction * _velocity * Time.deltaTime);
     }
 
     private void Update()
     {
         if (!photonView.IsMine) return;
-        SetCursorVisible(false);
-        look();
-        jump();
-        move();
+        if (isGrounded && !Input.GetKey(KeyCode.Space)) velocity = new Vector3(0, -2, 0);
+        else velocity.y += Time.deltaTime * Gravity;
+        characterController.Move(velocity * Time.deltaTime);
+        if (canMove)
+        {
+            look();
+            jump();
+            move();
+        }
+        if (Input.GetKeyDown(KeyCode.V)) SceneManager.LoadScene("Menu");
     }
 
 }

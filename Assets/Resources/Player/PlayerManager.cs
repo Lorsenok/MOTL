@@ -7,7 +7,9 @@ using System.IO;
 public class PlayerManager : MonoBehaviour
 {
 
-    PhotonView photonView;
+    private PhotonView photonView;
+    [SerializeField] public GameObject menu;
+    private PlayerController player;
 
     private void Awake()
     {
@@ -18,14 +20,37 @@ public class PlayerManager : MonoBehaviour
     {
         if ( photonView.IsMine )
         {
-            CreatePlayerController();
+            player = CreatePlayerController().GetComponent<PlayerController>();
         }
     }
 
-    private void CreatePlayerController()
+    private GameObject CreatePlayerController()
     {
         Debug.Log("Created player controller");
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+        return PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+    }
+
+    private void Update()
+    {
+        if (!photonView.IsMine)
+        {
+            if (GetComponentInChildren<Canvas>())
+            {
+                Destroy(GetComponentInChildren<Canvas>().gameObject);
+            }
+            return;
+        }
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            ChangeCanvasState();
+        }
+        player.GetComponent<PlayerController>().SetCursorVisible(menu.activeSelf);
+        player.GetComponent<PlayerController>().canMove = !menu.activeSelf;
+    }
+
+    public void ChangeCanvasState()
+    {
+        menu.SetActive(!menu.activeSelf);
     }
 
 }

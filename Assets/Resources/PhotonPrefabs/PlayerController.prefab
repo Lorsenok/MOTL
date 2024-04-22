@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 2087658636817209553}
   m_Layer: 0
   m_Name: PlayerController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -415,6 +415,7 @@ MonoBehaviour:
   Speed: 12.5
   JumpHeight: 2
   cam: {fileID: 2736805952475558228}
+  canMove: 1
 --- !u!114 &8835419842579861173
 MonoBehaviour:
   m_ObjectHideFlags: 0

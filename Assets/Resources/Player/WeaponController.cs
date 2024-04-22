@@ -69,7 +69,7 @@ public class WeaponController : MonoBehaviour
 
             laser.transform.position = laserSpawnPoint.transform.position;
             laser.transform.rotation = Quaternion.RotateTowards(laser.transform.rotation, laserSpawnPoint.transform.rotation, aim * Time.deltaTime);
-            GetComponent<PlayerController>().PushBack(Time.deltaTime * recoil);
+            GetComponent<PlayerController>().Push(Time.deltaTime * recoil, -transform.forward.normalized);
 
             Vector3 direction = laser.GetComponentInChildren<MeshRenderer>().gameObject.transform.position - laserSpawnPoint.transform.position;
             Ray ray = new(laserSpawnPoint.transform.position, direction.normalized);
@@ -132,7 +132,10 @@ public class WeaponController : MonoBehaviour
             if (audio != GetComponent<AudioListener>()) Destroy(audio);
         }
 
-        shoot();
+        if (GetComponent<PlayerController>().canMove)
+        {
+            shoot();
+        }
         reload();
     }
 
