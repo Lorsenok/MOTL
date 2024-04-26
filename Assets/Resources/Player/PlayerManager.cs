@@ -46,6 +46,11 @@ public class PlayerManager : MonoBehaviour
         }
         player.GetComponent<PlayerController>().SetCursorVisible(menu.activeSelf);
         player.GetComponent<PlayerController>().canMove = !menu.activeSelf;
+
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+        }
     }
 
     public void ChangeCanvasState()

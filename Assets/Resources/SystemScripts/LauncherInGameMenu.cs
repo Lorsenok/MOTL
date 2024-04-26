@@ -8,6 +8,7 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
 {
 
     private PhotonView pv;
+    [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject eventSystem;
 
     private void Awake()
@@ -15,6 +16,7 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
         pv = GetComponent<PhotonView>();
         if (!pv.IsMine)
         {
+            Destroy(canvas);
             Destroy(eventSystem);
             return;
         }

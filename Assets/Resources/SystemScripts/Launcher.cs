@@ -31,6 +31,14 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+        }
+    }
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to master");
@@ -83,6 +91,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
 
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+        setupGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)

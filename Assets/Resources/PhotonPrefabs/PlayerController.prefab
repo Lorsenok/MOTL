@@ -428,18 +428,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 740449e2561f28b4cbf03037e7cdc5eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserSpawnPoint: {fileID: 5360802166425608708}
-  checkRaycastLayer:
+  LaserSpawnPoint: {fileID: 5360802166425608708}
+  CheckRaycastLayer:
     serializedVersion: 2
     m_Bits: 64
-  distanceWithoutObstacles: 1000
-  laserSizeCut: 1
+  DistanceWithoutObstacles: 3000
+  LaserSizeCut: -0.5
   shootDelaySet: 1
   laserColor: {r: 0, g: 0, b: 0, a: 0}
   damage: 0
   recoil: 0
   aim: 0
-  size: 0
+  Size: 0
   reloadTimeMax: 0
   ammoMax: 0
   ammo: 0

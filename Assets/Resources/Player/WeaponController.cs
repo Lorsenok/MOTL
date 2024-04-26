@@ -7,10 +7,10 @@ using System.IO;
 public class WeaponController : MonoBehaviour
 {
     
-    [SerializeField] private GameObject laserSpawnPoint;
-    [SerializeField] private LayerMask checkRaycastLayer;
-    [SerializeField] private float distanceWithoutObstacles;
-    [SerializeField] private float laserSizeCut;
+    public GameObject LaserSpawnPoint;
+    public LayerMask CheckRaycastLayer;
+    public float DistanceWithoutObstacles;
+    public float LaserSizeCut;
 
     [SerializeField] private float shootDelaySet;
     private float shootDelay = 0;
@@ -21,7 +21,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private float damage;
     [SerializeField] private float recoil;
     [SerializeField] private float aim;
-    [SerializeField] private float size;
+    public float Size;
 
     [SerializeField] private float reloadTimeMax;
     private float reloadTime = 0;
@@ -32,23 +32,17 @@ public class WeaponController : MonoBehaviour
 
     private PhotonView photonView;
 
-    public void Setup()
+    [PunRPC] public void Setup(float _damage, float _recoil, float _aim, float _size, float _reloadTimeMax, float _ammoMax, float r, float g, float b)
     {
-        damage = WeaponData.Damage;
-        recoil = WeaponData.Recoil;
-        aim = WeaponData.Aim;
-        size = WeaponData.Size;
-
-        reloadTimeMax = WeaponData.ReloadTimeMax;
-        reloadTime = reloadTimeMax;
-
-        ammoMax = WeaponData.AmmoMax;
-        ammo = ammoMax;
-
-        laserColor = WeaponData.LaserColor;
+        damage = _damage;
+        recoil = _recoil;
+        aim = _aim;
+        Size = _size;
+        reloadTimeMax = _reloadTimeMax;
+        ammoMax = _ammoMax;
+        laserColor = new Color(r, g, b);
     }
 
-    private RaycastHit hit;
     private GameObject laser;
     private void shoot()
     {
@@ -61,16 +55,17 @@ public class WeaponController : MonoBehaviour
         {
             if (laser == null)
             {
-                laser = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Laser"), laserSpawnPoint.transform.position, laserSpawnPoint.transform.rotation);
+                laser = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Laser"), LaserSpawnPoint.transform.position, LaserSpawnPoint.transform.rotation);
                 laser.GetComponentInChildren<MeshRenderer>().material.color = laserColor;
             }
 
             ammo -= Time.deltaTime;
 
-            laser.transform.position = laserSpawnPoint.transform.position;
-            laser.transform.rotation = Quaternion.RotateTowards(laser.transform.rotation, laserSpawnPoint.transform.rotation, aim * Time.deltaTime);
+            laser.transform.position = LaserSpawnPoint.transform.position;
+            laser.transform.rotation = Quaternion.RotateTowards(laser.transform.rotation, LaserSpawnPoint.transform.rotation, aim * Time.deltaTime);
             GetComponent<PlayerController>().Push(Time.deltaTime * recoil, -transform.forward.normalized);
 
+            /*
             Vector3 direction = laser.GetComponentInChildren<MeshRenderer>().gameObject.transform.position - laserSpawnPoint.transform.position;
             Ray ray = new(laserSpawnPoint.transform.position, direction.normalized);
             Physics.Raycast(ray, out hit, Mathf.Infinity, checkRaycastLayer);
@@ -82,7 +77,7 @@ public class WeaponController : MonoBehaviour
 
             laser.GetComponentInChildren<MeshRenderer>().gameObject.transform.localScale = new Vector3(size, distance / 2 - laserSizeCut, size);
             laser.GetComponentInChildren<MeshRenderer>().gameObject.transform.localPosition = new Vector3(0, distance / 2, 0);
-
+            */
         }
         else
         {
@@ -117,15 +112,11 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Setup();
-        photonView = GetComponent<PhotonView>();
-    }
-
     private void Update()
     {
         if (!photonView.IsMine) return;
+
+        photonView.RPC("Setup", RpcTarget.AllBuffered, WeaponData.Damage, WeaponData.Recoil, WeaponData.Aim, WeaponData.Size, WeaponData.ReloadTimeMax, WeaponData.AmmoMax, WeaponData.LaserColor.r, WeaponData.LaserColor.g, WeaponData.LaserColor.b);
 
         foreach (AudioListener audio in FindObjectsOfType<AudioListener>())
         {
@@ -137,6 +128,11 @@ public class WeaponController : MonoBehaviour
             shoot();
         }
         reload();
+    }
+
+    private void Awake()
+    {
+        photonView = GetComponent<PhotonView>();
     }
 
 }
