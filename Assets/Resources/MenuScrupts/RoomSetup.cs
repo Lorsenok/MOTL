@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -27,8 +27,8 @@ public class RoomSetup : MonoBehaviour
     {
         RoomData.PlayTime = playTimeSlider.value;
         RoomData.SpawnTime = spawnTimeSlider.value;
-        RoomData.Gravity = gravitySlider.value;
-        RoomData.HP = hpSlider.value;
+        RoomData.Gravity = -gravitySlider.value; //Гравитация должна быть отрицательной
+        RoomData.HP = int.Parse(hpSlider.value.ToString());
         RoomData.Speed = speedSlider.value;
         RoomData.DamageMultiplier = damageMultiplierSlider.value;
 

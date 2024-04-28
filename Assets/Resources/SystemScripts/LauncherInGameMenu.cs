@@ -32,6 +32,10 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
         if (!pv.IsMine) return;
         Debug.Log("Leaving room");
         Destroy(FindObjectOfType<RoomManager>().gameObject);
+        foreach (PhotonView _pv in FindObjectsOfType<PhotonView>())
+        {
+            PhotonNetwork.OpCleanRpcBuffer(_pv);
+        }
         PhotonNetwork.LeaveRoom();
     }
 

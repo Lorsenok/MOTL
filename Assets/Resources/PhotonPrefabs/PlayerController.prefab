@@ -410,6 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25da63fcee396ed419fc217b2388331f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HP: 0
   Sensitivity: 100
   Gravity: -9.81
   Speed: 12.5

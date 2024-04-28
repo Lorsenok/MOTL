@@ -2835,6 +2835,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 839790963674889510}
+  HP: 0
+  Speed: 0
+  DamageMultiplier: 0
+  Gravity: 0
+  PlayTime: 0
+  SpawnTime: 0
+  isMaster: 0
 --- !u!114 &2744668207630457812
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-using Photon.Pun;
+﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public int HP;
 
     public float Sensitivity;
     public float Gravity;
@@ -80,9 +82,17 @@ public class PlayerController : MonoBehaviour
         characterController.Move(direction * _velocity * Time.deltaTime);
     }
 
+    private bool once = true;
     private void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
+        if (once) // Костыль ебаный
+        {
+            HP = RoomData.HP;
+            Gravity = RoomData.Gravity;
+            Speed = RoomData.Speed;
+            once = false;
+        }
         if (isGrounded && !Input.GetKey(KeyCode.Space)) velocity = new Vector3(0, -2, 0);
         else velocity.y += Time.deltaTime * Gravity;
         characterController.Move(velocity * Time.deltaTime);
