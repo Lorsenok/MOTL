@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] public GameObject menu;
     private PlayerController player;
 
-    public int HP;
+    public float HP;
     public float Speed;
     public float DamageMultiplier;
     public float Gravity;
@@ -19,6 +19,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public float SpawnTime;
 
     public bool isMaster;
+
+    public bool isLeaving = false;
 
     private void Awake()
     {
@@ -31,6 +33,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             OnJoinedRoom();
         }
+    }
+
+    public void StartGame()
+    {
+        OnJoinedRoom();
     }
 
     public override void OnJoinedRoom()
@@ -53,12 +60,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Created player controller");
         GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+        player.GetComponent<PlayerController>().playerManager = this;
+        player.GetComponent<WeaponController>().playerManager = this;
         return player;
     }
 
     private void Update()
     {
-        if (!PhotonNetwork.InRoom | player == null) return;
+        if (!PhotonNetwork.InRoom | player == null | isLeaving) return;
         if (!photonView.IsMine)
         {
             if (GetComponentInChildren<Canvas>())
@@ -108,14 +117,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
 
 
-    [PunRPC] public void RoomDataSet(int hp, float speed, float damageMultiplier, float gravity, float playTime, float spawnTime)
+    [PunRPC] public void RoomDataSet(float hp, float speed, float damageMultiplier, float gravity, float playTime, float spawnTime)
     {
         HP = hp;
         Speed = speed;
         DamageMultiplier = damageMultiplier;
-        Gravity = gravity;
-        PlayTime = playTime;
-        SpawnTime = spawnTime;
         Gravity = gravity;
         PlayTime = playTime;
         SpawnTime = spawnTime;

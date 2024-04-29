@@ -7,7 +7,7 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
 
-    private WeaponController weapon;
+    [HideInInspector] public WeaponController weapon;
 
     private void Awake()
     {
@@ -21,6 +21,7 @@ public class Laser : MonoBehaviour
             }
         }
 
+        GetComponentInChildren<LaserCollider>().weapon = weapon;
     }
 
     private RaycastHit hit;

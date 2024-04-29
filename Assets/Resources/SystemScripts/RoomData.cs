@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RoomData : MonoBehaviour
 {
-    public static int HP = 100;
-    public static int HPDefault = 100;
+    public static float HP = 100;
+    public static float HPDefault = 100;
 
     public static float Speed = 10;
     public static float SpeedDefault = 10;

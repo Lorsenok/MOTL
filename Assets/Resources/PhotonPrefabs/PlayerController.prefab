@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 8835419842579861173}
   - component: {fileID: 6477546970793237952}
   - component: {fileID: 2087658636817209553}
+  - component: {fileID: 6679486966959303799}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Player
@@ -416,6 +417,7 @@ MonoBehaviour:
   Speed: 12.5
   JumpHeight: 2
   cam: {fileID: 2736805952475558228}
+  playerManager: {fileID: 0}
   canMove: 1
 --- !u!114 &8835419842579861173
 MonoBehaviour:
@@ -444,6 +446,7 @@ MonoBehaviour:
   reloadTimeMax: 0
   ammoMax: 0
   ammo: 0
+  playerManager: {fileID: 0}
 --- !u!114 &6477546970793237952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,3 +486,24 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 1
   m_UseLocal: 1
+--- !u!65 &6679486966959303799
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5752269273844983252}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 1.58, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}

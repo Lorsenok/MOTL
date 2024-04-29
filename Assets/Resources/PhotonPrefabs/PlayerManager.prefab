@@ -2842,6 +2842,7 @@ MonoBehaviour:
   PlayTime: 0
   SpawnTime: 0
   isMaster: 0
+  isLeaving: 0
 --- !u!114 &2744668207630457812
 MonoBehaviour:
   m_ObjectHideFlags: 0

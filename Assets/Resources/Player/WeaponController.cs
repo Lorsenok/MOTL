@@ -18,7 +18,7 @@ public class WeaponController : MonoBehaviour
     //На релизе все SerializeField ниже удалить!!!
     [SerializeField] private Color laserColor;
 
-    [SerializeField] private float damage;
+    public float damage;
     [SerializeField] private float recoil;
     [SerializeField] private float aim;
     public float Size;
@@ -31,6 +31,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private float ammo;
 
     private PhotonView photonView;
+    [HideInInspector] public PlayerManager playerManager;
 
     [PunRPC] public void Setup(float _damage, float _recoil, float _aim, float _size, float _reloadTimeMax, float _ammoMax, float r, float g, float b)
     {
@@ -114,7 +115,8 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
+        if (playerManager.isLeaving) return;
 
         photonView.RPC("Setup", RpcTarget.AllBuffered, WeaponData.Damage, WeaponData.Recoil, WeaponData.Aim, WeaponData.Size, WeaponData.ReloadTimeMax, WeaponData.AmmoMax, WeaponData.LaserColor.r, WeaponData.LaserColor.g, WeaponData.LaserColor.b);
 
@@ -126,6 +128,15 @@ public class WeaponController : MonoBehaviour
         if (GetComponent<PlayerController>().canMove)
         {
             shoot();
+        }
+        else
+        {
+            if (laser != null)
+            {
+                PhotonNetwork.Destroy(laser);
+                laser = null;
+                shootDelay = shootDelaySet;
+            }
         }
         reload();
     }

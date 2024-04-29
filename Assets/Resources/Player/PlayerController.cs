@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
 
-    public int HP;
+    public float HP;
 
     public float Sensitivity;
     public float Gravity;
@@ -21,8 +20,9 @@ public class PlayerController : MonoBehaviour
     private CharacterController characterController;
 
     private PhotonView photonView;
+    [HideInInspector] public PlayerManager playerManager;
 
-    public bool canMove = true;
+    [HideInInspector] public bool canMove = true;
 
     private void Awake()
     {
@@ -85,14 +85,23 @@ public class PlayerController : MonoBehaviour
     private bool once = true;
     private void Update()
     {
+        if (HP <= 0 & !once)
+        {
+            playerManager.StartGame();
+            PhotonNetwork.Destroy(gameObject);
+        }
+
         if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
+        if (playerManager.isLeaving) return;
+
         if (once) // Костыль ебаный
         {
-            HP = RoomData.HP;
+            photonView.RPC("Setup", RpcTarget.AllBuffered, RoomData.HP);
             Gravity = RoomData.Gravity;
             Speed = RoomData.Speed;
             once = false;
         }
+
         if (isGrounded && !Input.GetKey(KeyCode.Space)) velocity = new Vector3(0, -2, 0);
         else velocity.y += Time.deltaTime * Gravity;
         characterController.Move(velocity * Time.deltaTime);
@@ -102,7 +111,22 @@ public class PlayerController : MonoBehaviour
             jump();
             move();
         }
-        if (Input.GetKeyDown(KeyCode.V)) SceneManager.LoadScene("Menu");
+        //photonView.RPC("Setup", RpcTarget.AllBuffered, HP);
+    }
+
+    [PunRPC] public void Setup(float hp)
+    {
+        HP = hp;
+    }
+
+    public void GetDamage(float damage)
+    {
+        photonView.RPC("Damage", RpcTarget.AllBuffered, damage);
+    }
+
+    [PunRPC] public void Damage(float damage)
+    {
+        HP -= damage * Time.deltaTime;
     }
 
 }

@@ -43,6 +43,8 @@ MonoBehaviour:
   - DataSet
   - RoomDataSet
   - IsMasterSet
+  - GetDamage
+  - Damage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
