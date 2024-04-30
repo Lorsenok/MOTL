@@ -7,25 +7,22 @@ using System.IO;
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
 
-    private PhotonView photonView;
     [SerializeField] public GameObject menu;
     private PlayerController player;
 
-    public float HP;
-    public float Speed;
-    public float DamageMultiplier;
-    public float Gravity;
-    public float PlayTime;
-    public float SpawnTime;
+    [HideInInspector] public float HP;
+    [HideInInspector] public float Speed;
+    [HideInInspector] public float DamageMultiplier;
+    [HideInInspector] public float Gravity;
+    [HideInInspector] public float PlayTime;
+    [HideInInspector] public float SpawnTime;
 
-    public bool isMaster;
+    [HideInInspector] public bool IsMaster;
+    [HideInInspector] public bool IsLeaving = false;
 
-    public bool isLeaving = false;
-
-    private void Awake()
-    {
-        photonView = GetComponent<PhotonView>();
-    }
+    public int Kills = 0;
+    public int Deaths = 0;
+    public int Ping = 0;
 
     private void Start()
     {
@@ -67,7 +64,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (!PhotonNetwork.InRoom | player == null | isLeaving) return;
+        if (!PhotonNetwork.InRoom | player == null | IsLeaving) return;
         if (!photonView.IsMine)
         {
             if (GetComponentInChildren<Canvas>())
@@ -81,7 +78,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             foreach (PlayerManager pm in FindObjectsOfType<PlayerManager>())
             {
-                if (pm.isMaster)
+                if (pm.IsMaster)
                 {
                     RoomData.HP = pm.HP;
                     player.HP = pm.HP;
@@ -97,6 +94,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
             photonView.RPC("RoomDataSet", RpcTarget.AllBuffered, RoomData.HP, RoomData.Speed, RoomData.DamageMultiplier, RoomData.Gravity, RoomData.PlayTime, RoomData.SpawnTime);
         }
+
+        photonView.RPC("KDPSetup", RpcTarget.AllBuffered, Kills, Deaths, PhotonNetwork.GetPing());
 
         if (Input.GetKeyUp(KeyCode.Escape))
         {
@@ -129,7 +128,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     [PunRPC] public void IsMasterSet(bool _isMaster)
     {
-        isMaster = _isMaster;
+        IsMaster = _isMaster;
+    }
+
+    [PunRPC] public void KDPSetup(int kills, int deaths, int ping)
+    {
+        Kills = kills;
+        Deaths = deaths;
+        Ping = ping;
     }
 
 }

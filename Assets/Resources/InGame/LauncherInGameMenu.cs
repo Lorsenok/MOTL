@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class LauncherInGameMenu : MonoBehaviourPunCallbacks
 {
-
     private PhotonView pv;
     [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject eventSystem;
@@ -34,7 +33,7 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
         Destroy(FindObjectOfType<RoomManager>().gameObject);
         foreach (PlayerManager pm in FindObjectsOfType<PlayerManager>())
         {
-            pm.isLeaving = true;
+            pm.IsLeaving = true;
         }
         foreach (PhotonView _pv in FindObjectsOfType<PhotonView>())
         {

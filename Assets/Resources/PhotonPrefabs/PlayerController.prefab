@@ -411,7 +411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25da63fcee396ed419fc217b2388331f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 0
+  HP: 100
   Sensitivity: 100
   Gravity: -9.81
   Speed: 12.5
@@ -419,6 +419,7 @@ MonoBehaviour:
   cam: {fileID: 2736805952475558228}
   playerManager: {fileID: 0}
   canMove: 1
+  isDead: 0
 --- !u!114 &8835419842579861173
 MonoBehaviour:
   m_ObjectHideFlags: 0

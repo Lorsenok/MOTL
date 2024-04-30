@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.SceneManagement;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -19,6 +18,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playerListPrefab;
     [SerializeField] GameObject startGameButton;
     [SerializeField] GameObject setupGameButton;
+    [SerializeField] TMPro.TMP_InputField changeNicknameInputField;
+
+    private static bool isNickameChanged = false;
+    private static string nickname;
 
     public void Awake()
     {
@@ -50,6 +53,26 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.MenuOpen("title");
         Debug.Log("Joined a lobby");
+        if (nickname != null)
+        {
+            isNickameChanged = true;
+            changeNicknameInputField.text = nickname;
+            PhotonNetwork.NickName = changeNicknameInputField.text;
+        }
+    }
+
+    public void OnNicknameChanged()
+    {
+        if (changeNicknameInputField.text.Length > 5)
+        {
+            isNickameChanged = true;
+            PhotonNetwork.NickName = changeNicknameInputField.text;
+            nickname = PhotonNetwork.NickName;
+        }
+        else
+        {
+            logText.GetComponent<LogText>().Message("Nickname must have more than 5 symbols");
+        }
     }
 
     public void CreateRoom()
@@ -76,7 +99,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.MenuOpen("room");
         Debug.Log("Room joined");
         roomName.text = PhotonNetwork.CurrentRoom.Name;
-        PhotonNetwork.NickName = "Player" + Random.Range(-1000, 1000);
+        if (!isNickameChanged)
+        {
+            PhotonNetwork.NickName = "Player" + Random.Range(-1000, 1000);
+        }
 
         foreach (Transform child in playerListContent)
         {

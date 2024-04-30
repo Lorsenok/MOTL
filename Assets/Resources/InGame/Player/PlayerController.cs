@@ -20,9 +20,11 @@ public class PlayerController : MonoBehaviour
     private CharacterController characterController;
 
     private PhotonView photonView;
-    [HideInInspector] public PlayerManager playerManager;
+    public PlayerManager playerManager;
 
     [HideInInspector] public bool canMove = true;
+
+    [HideInInspector] public bool isDead = false;
 
     private void Awake()
     {
@@ -37,6 +39,16 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<Camera>());
             Destroy(rg);
+        }
+        if (playerManager == null)
+        {
+            foreach (PlayerManager _playerManager in FindObjectsOfType<PlayerManager>())
+            {
+                if (_playerManager.gameObject.GetComponent<PhotonView>().Owner == photonView.Owner)
+                {
+                    playerManager = _playerManager;
+                }
+            }
         }
     }
 
@@ -85,14 +97,14 @@ public class PlayerController : MonoBehaviour
     private bool once = true;
     private void Update()
     {
-        if (HP <= 0 & !once)
+        if (isDead)
         {
             playerManager.StartGame();
             PhotonNetwork.Destroy(gameObject);
         }
 
         if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
-        if (playerManager.isLeaving) return;
+        if (playerManager.IsLeaving) return;
 
         if (once) // Костыль ебаный
         {
@@ -127,6 +139,17 @@ public class PlayerController : MonoBehaviour
     [PunRPC] public void Damage(float damage)
     {
         HP -= damage * Time.deltaTime;
+    }
+
+    public void SetDeath()
+    {
+        photonView.RPC("Death", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC] public void Death()
+    {
+        isDead = true;
+        playerManager.Deaths += 1;
     }
 
 }

@@ -116,7 +116,7 @@ public class WeaponController : MonoBehaviour
     private void Update()
     {
         if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
-        if (playerManager.isLeaving) return;
+        if (playerManager.IsLeaving) return;
 
         photonView.RPC("Setup", RpcTarget.AllBuffered, WeaponData.Damage, WeaponData.Recoil, WeaponData.Aim, WeaponData.Size, WeaponData.ReloadTimeMax, WeaponData.AmmoMax, WeaponData.LaserColor.r, WeaponData.LaserColor.g, WeaponData.LaserColor.b);
 
