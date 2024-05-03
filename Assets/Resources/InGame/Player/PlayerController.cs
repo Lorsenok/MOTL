@@ -52,13 +52,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SetCursorVisible(bool visible)
-    {
-        Cursor.visible = visible;
-        if (visible) Cursor.lockState = CursorLockMode.None;
-        if (!visible) Cursor.lockState = CursorLockMode.Locked;
-    }
-
     public void SetGroundedState(bool state)
     {
         isGrounded = state;
@@ -99,7 +92,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead)
         {
-            playerManager.StartGame();
+            if (photonView.IsMine) playerManager.SpawnTimeCur = playerManager.SpawnTime;
+            playerManager.player = null;
             PhotonNetwork.Destroy(gameObject);
         }
 

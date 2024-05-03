@@ -42,6 +42,13 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
+    public static void SetCursorVisible(bool visible)
+    {
+        Cursor.visible = visible;
+        if (visible) Cursor.lockState = CursorLockMode.None;
+        if (!visible) Cursor.lockState = CursorLockMode.Locked;
+    }
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to master");

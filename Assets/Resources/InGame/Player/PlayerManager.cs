@@ -8,7 +8,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 {
 
     [SerializeField] public GameObject menu;
-    private PlayerController player;
+    [HideInInspector] public PlayerController player;
 
     [HideInInspector] public float HP;
     [HideInInspector] public float Speed;
@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [HideInInspector] public float Gravity;
     [HideInInspector] public float PlayTime;
     [HideInInspector] public float SpawnTime;
+    [HideInInspector] public float SpawnTimeCur = 0;
 
     [HideInInspector] public bool IsMaster;
     [HideInInspector] public bool IsLeaving = false;
@@ -34,7 +35,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
-        OnJoinedRoom();
+        player = CreatePlayerController().GetComponent<PlayerController>();
     }
 
     public override void OnJoinedRoom()
@@ -55,22 +56,32 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private GameObject CreatePlayerController()
     {
-        Debug.Log("Created player controller");
         GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
         player.GetComponent<PlayerController>().playerManager = this;
         player.GetComponent<WeaponController>().playerManager = this;
+        Debug.Log("Created player controller");
         return player;
     }
 
     private void Update()
     {
-        if (!PhotonNetwork.InRoom | player == null | IsLeaving) return;
+        if (!PhotonNetwork.InRoom | IsLeaving) return;
         if (!photonView.IsMine)
         {
             if (GetComponentInChildren<Canvas>())
             {
                 Destroy(GetComponentInChildren<Canvas>().gameObject);
             }
+            return;
+        }
+
+        if (player == null)
+        {
+            if (SpawnTimeCur > 0)
+            {
+                SpawnTimeCur -= Time.deltaTime;
+            }
+            Launcher.SetCursorVisible(true);
             return;
         }
 
@@ -101,7 +112,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             ChangeCanvasState();
         }
-        player.SetCursorVisible(menu.activeSelf);
+        Launcher.SetCursorVisible(menu.activeSelf);
         player.canMove = !menu.activeSelf;
 
         if (Input.GetKeyDown(KeyCode.F11))
