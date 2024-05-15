@@ -9,6 +9,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public static Launcher Instance { get; private set; }
 
+    [SerializeField] private GameObject roomManagerPrefab;
     [SerializeField] GameObject logText;
     [SerializeField] TMPro.TMP_InputField createRoomInputField;
     [SerializeField] TMPro.TMP_Text roomName;
@@ -31,7 +32,17 @@ public class Launcher : MonoBehaviourPunCallbacks
     private void Start()
     {
         Debug.Log("Connecting a server");
-        PhotonNetwork.ConnectUsingSettings();
+        SetCursorVisible(true);
+        if (!PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            DontDestroyOnLoad(Instantiate(roomManagerPrefab));
+        }
+        else
+        {
+            GetComponent<MenuManager>().MenuOpen("room");
+            UpdatePlayerList();
+        }
     }
 
     private void Update()
@@ -170,6 +181,14 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             if (roomList[i].RemovedFromList) continue;
             Instantiate(roomListPrefab, roomListContent).GetComponent<RoomButton>().SetUp(roomList[i]); 
+        }
+    }
+
+    private void UpdatePlayerList()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            Instantiate(playerListPrefab, playerListContent).GetComponent<PlayerText>().SetUp(player);
         }
     }
 

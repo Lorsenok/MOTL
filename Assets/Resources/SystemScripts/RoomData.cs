@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,9 +16,13 @@ public class RoomData : MonoBehaviour
     public static float Gravity = -9.81f;
     public static float GravityDefault = 9.81f;
     
-    public static float PlayTime = 5;
-    public static float PlayTimeDefault = 5;
+    public static float PlayTime = 120;
+    public static float PlayTimeDefault = 120;
 
     public static float SpawnTime = 5;
     public static float SpawnTimeDefault = 5;
+
+    public static GameRuleType GameMode = GameRuleType.Deathmatch;
+    public static GameRuleType GameModeDefault = GameRuleType.Deathmatch;
+
 }
