@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public float Speed;
     public float JumpHeight;
 
+    private float curSpeed;
+
     private bool isGrounded;
 
     [SerializeField] private GameObject cam;
@@ -71,7 +73,12 @@ public class PlayerController : MonoBehaviour
 
     private void move()
     {
-        characterController.Move((transform.right * Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") * transform.forward) * Speed * Time.deltaTime);
+        curSpeed += Speed;
+    }
+
+    public void Push(float recoil)
+    {
+        curSpeed -= recoil;
     }
 
     private void jump()
@@ -118,6 +125,12 @@ public class PlayerController : MonoBehaviour
             move();
         }
         //photonView.RPC("Setup", RpcTarget.AllBuffered, HP);
+    }
+
+    private void LateUpdate()
+    {
+        characterController.Move((transform.right * Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") * transform.forward) * curSpeed * Time.deltaTime);
+        curSpeed = 0;
     }
 
     [PunRPC] public void Setup(float hp)

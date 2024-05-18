@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Room Manager
   - LSP
+  - Spawner
   layers:
   - Default
   - TransparentFX

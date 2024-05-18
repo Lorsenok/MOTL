@@ -45,6 +45,7 @@ public class WeaponController : MonoBehaviour
     }
 
     private GameObject laser;
+    private PlayerController playerController;
     private void shoot()
     {
         if (shootDelay > 0)
@@ -64,21 +65,7 @@ public class WeaponController : MonoBehaviour
 
             laser.transform.position = LaserSpawnPoint.transform.position;
             laser.transform.rotation = Quaternion.RotateTowards(laser.transform.rotation, LaserSpawnPoint.transform.rotation, aim * Time.deltaTime);
-            GetComponent<PlayerController>().Push(Time.deltaTime * recoil, -transform.forward.normalized);
-
-            /*
-            Vector3 direction = laser.GetComponentInChildren<MeshRenderer>().gameObject.transform.position - laserSpawnPoint.transform.position;
-            Ray ray = new(laserSpawnPoint.transform.position, direction.normalized);
-            Physics.Raycast(ray, out hit, Mathf.Infinity, checkRaycastLayer);
-
-            float distance;
-
-            if (hit.collider != null) distance = Vector3.Distance(transform.position, hit.point);
-            else distance = distanceWithoutObstacles;
-
-            laser.GetComponentInChildren<MeshRenderer>().gameObject.transform.localScale = new Vector3(size, distance / 2 - laserSizeCut, size);
-            laser.GetComponentInChildren<MeshRenderer>().gameObject.transform.localPosition = new Vector3(0, distance / 2, 0);
-            */
+            playerController.Push(Time.deltaTime * recoil);
         }
         else
         {
@@ -125,7 +112,7 @@ public class WeaponController : MonoBehaviour
             if (audio != GetComponent<AudioListener>()) Destroy(audio);
         }
 
-        if (GetComponent<PlayerController>().canMove)
+        if (playerController.canMove)
         {
             shoot();
         }
@@ -144,6 +131,7 @@ public class WeaponController : MonoBehaviour
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
+        playerController = GetComponent<PlayerController>();
     }
 
 }

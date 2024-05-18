@@ -56,10 +56,13 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private GameObject CreatePlayerController()
     {
-        GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+        GameObject[] spawners = GameObject.FindGameObjectsWithTag("Spawner");
+        Vector3 spawn = spawners[Random.Range(0, spawners.Length-1)].transform.position;
+        GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawn, Quaternion.identity);
         player.GetComponent<PlayerController>().playerManager = this;
         player.GetComponent<WeaponController>().playerManager = this;
         Debug.Log("Created player controller");
+        FindObjectOfType<Settings>().Setup();
         return player;
     }
 

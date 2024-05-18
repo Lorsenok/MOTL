@@ -13,37 +13,37 @@ public class GroundCheck : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == playerController.gameObject) return;
+        if (other.gameObject == playerController.gameObject || other.gameObject.GetComponentInParent<Laser>()) return;
         playerController.SetGroundedState(true);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == playerController.gameObject) return;
+        if (other.gameObject == playerController.gameObject || other.gameObject.GetComponentInParent<Laser>()) return;
         playerController.SetGroundedState(false);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject == playerController.gameObject) return;
+        if (other.gameObject == playerController.gameObject || other.gameObject.GetComponentInParent<Laser>()) return;
         playerController.SetGroundedState(true);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == playerController.gameObject) return;
+        if (collision.gameObject == playerController.gameObject || collision.gameObject.GetComponentInParent<Laser>()) return;
         playerController.SetGroundedState(true);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject == playerController.gameObject) return;
+        if (collision.gameObject == playerController.gameObject || collision.gameObject.GetComponentInParent<Laser>()) return;
         playerController.SetGroundedState(false);
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject == playerController.gameObject) return;
+        if (collision.gameObject == playerController.gameObject || collision.gameObject.GetComponentInParent<Laser>()) return;
         playerController.SetGroundedState(true);
     }
 }

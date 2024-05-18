@@ -20,7 +20,6 @@ public class Death : MonoBehaviour
         if (playerManager.SpawnTimeCur <= 0)
         {
             playerManager.StartGame();
-            Debug.Log("+");
         }
     }
 
