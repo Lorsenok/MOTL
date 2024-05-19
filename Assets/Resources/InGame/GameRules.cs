@@ -70,6 +70,11 @@ public class GameRules : MonoBehaviourPunCallbacks
     private bool isLoadingScene = false;
     private void Update()
     {
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
+        {
+            pv.RPC("Setup", RpcTarget.AllBuffered, RoomData.GameMode, PlayTime);
+        }
+
         switch (RuleType)
         {
             case GameRuleType.Deathmatch:
@@ -84,7 +89,7 @@ public class GameRules : MonoBehaviourPunCallbacks
         {
             timeBeforeRestart -= Time.deltaTime / Time.timeScale;
             Time.timeScale = 1 / timeBeforeRestartSet * timeBeforeRestart;
-            if (timeBeforeRestart <= 0.1f & PhotonNetwork.IsMasterClient)
+            if (timeBeforeRestart <= 0.1f)
             {
                 timeBeforeRestart = 0.1f;
                 PhotonNetwork.LoadLevel("Menu");

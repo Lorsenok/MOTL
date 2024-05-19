@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool canMove = true;
 
-    [HideInInspector] public bool isDead = false;
+    public bool isDead = false;
 
     private void Awake()
     {
@@ -89,11 +89,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Push(float _velocity, Vector3 direction)
-    {
-        characterController.Move(direction * _velocity * Time.deltaTime);
-    }
-
     private bool once = true;
     private void Update()
     {
@@ -104,8 +99,7 @@ public class PlayerController : MonoBehaviour
             PhotonNetwork.Destroy(gameObject);
         }
 
-        if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
-        if (playerManager.IsLeaving) return;
+        if (!photonView.IsMine || !PhotonNetwork.InRoom || playerManager.IsLeaving) return;
 
         if (once) // Костыль ебаный
         {
@@ -129,6 +123,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!photonView.IsMine) return;
         characterController.Move((transform.right * Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") * transform.forward) * curSpeed * Time.deltaTime);
         curSpeed = 0;
     }
