@@ -214,7 +214,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
-        PhotonNetwork.LoadLevel("TestMap");
+        PhotonNetwork.LoadLevel(1);
     }
 
     public void Exit()
