@@ -65,7 +65,7 @@ public class WeaponController : MonoBehaviour
 
             laser.transform.position = LaserSpawnPoint.transform.position;
             laser.transform.rotation = Quaternion.RotateTowards(laser.transform.rotation, LaserSpawnPoint.transform.rotation, aim * Time.deltaTime);
-            playerController.Push(Time.deltaTime * recoil);
+            playerController.Push(Time.deltaTime * recoil, -transform.forward);
         }
         else
         {

@@ -13,8 +13,8 @@ public class WeaponData
     public static float Recoil = 1500f;
     public static float RecoilDefault = 1500f;
     
-    public static float Aim = 100f;
-    public static float AimDefault = 50f;
+    public static float Aim = 90f;
+    public static float AimDefault = 90f;
     
     public static float Size = 0.5f;
     public static float SizeDefault = 0.5f;

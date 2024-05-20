@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,11 +26,13 @@ public class Settings : MonoBehaviour
 
     public void Setup()
     {
-        if (FindObjectOfType<PlayerController>())
+        foreach (PlayerController player in FindObjectsOfType<PlayerController>())
         {
-            PlayerController player = FindObjectOfType<PlayerController>();
-            player.Sensitivity = Sensitivity;
-            player.GetComponentInChildren<Camera>().fieldOfView = FOV;
+            if (player.GetComponent<PhotonView>().IsMine)
+            {
+                player.Sensitivity = Sensitivity;
+                player.GetComponentInChildren<Camera>().fieldOfView = FOV;
+            }
         }
     }
 }

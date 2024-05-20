@@ -29,11 +29,21 @@ public class WeaponSetup : MonoBehaviour
 
     public void Awake()
     {
+        if (PlayerPrefs.HasKey("damage"))
+        {
+            WeaponData.Damage = PlayerPrefs.GetFloat("damage");
+            WeaponData.Recoil = PlayerPrefs.GetFloat("recoil");
+            WeaponData.Aim = PlayerPrefs.GetFloat("aim");
+            WeaponData.Size = PlayerPrefs.GetFloat("size");
+            WeaponData.ReloadTimeMax = PlayerPrefs.GetFloat("reload");
+            WeaponData.AmmoMax = PlayerPrefs.GetFloat("ammo");
+        }
+
         damageSlider.value = WeaponData.Damage;
-        recoilSlider.value = WeaponData.Recoil;
+        recoilSlider.value = recoilSlider.maxValue + recoilSlider.minValue - WeaponData.Recoil;
         aimSlider.value = WeaponData.Aim;
         sizeSlider.value = WeaponData.Size;
-        reloadSlider.value = WeaponData.ReloadTimeMax;
+        reloadSlider.value = reloadSlider.maxValue + reloadSlider.minValue - WeaponData.ReloadTimeMax;
         ammoSlider.value = WeaponData.AmmoMax;
 
         redInputField.text = (WeaponData.LaserColor.r * 255).ToString();
@@ -46,11 +56,18 @@ public class WeaponSetup : MonoBehaviour
         if (points > 0)
         {
             WeaponData.Damage = damageSlider.value;
-            WeaponData.Recoil = (recoilSlider.maxValue + recoilSlider.minValue - recoilSlider.value);
+            WeaponData.Recoil = recoilSlider.maxValue + recoilSlider.minValue - recoilSlider.value;
             WeaponData.Aim = aimSlider.value;
             WeaponData.Size = sizeSlider.value;
-            WeaponData.ReloadTimeMax = (reloadSlider.maxValue + reloadSlider.minValue - reloadSlider.value);
+            WeaponData.ReloadTimeMax = reloadSlider.maxValue + reloadSlider.minValue - reloadSlider.value;
             WeaponData.AmmoMax = ammoSlider.value;
+
+            PlayerPrefs.SetFloat("damage", WeaponData.Damage);
+            PlayerPrefs.SetFloat("recoil", WeaponData.Recoil);
+            PlayerPrefs.SetFloat("aim", WeaponData.Aim);
+            PlayerPrefs.SetFloat("size", WeaponData.Size);
+            PlayerPrefs.SetFloat("reload", WeaponData.ReloadTimeMax);
+            PlayerPrefs.SetFloat("ammo", WeaponData.AmmoMax);
 
             if (redInputField.text != string.Empty & greenInputField.text != string.Empty & blueInputField.text != string.Empty & int.Parse(redInputField.text) < 256 & int.Parse(greenInputField.text) < 256 & int.Parse(blueInputField.text) < 256)
             {

@@ -13,8 +13,6 @@ public class PlayerController : MonoBehaviour
     public float Speed;
     public float JumpHeight;
 
-    private float curSpeed;
-
     private bool isGrounded;
 
     [SerializeField] private GameObject cam;
@@ -26,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool canMove = true;
 
-    public bool isDead = false;
+    [HideInInspector] public bool isDead = false;
 
     private void Awake()
     {
@@ -73,12 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private void move()
     {
-        curSpeed += Speed;
-    }
-
-    public void Push(float recoil)
-    {
-        curSpeed -= recoil;
+        characterController.Move((transform.right * Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") * transform.forward).normalized * Speed * Time.deltaTime);
     }
 
     private void jump()
@@ -87,6 +80,11 @@ public class PlayerController : MonoBehaviour
         {
             velocity = new Vector3(velocity.x, Mathf.Sqrt(JumpHeight * -2 * Gravity), velocity.z);
         }
+    }
+
+    public void Push(float _velocity, Vector3 direction)
+    {
+        characterController.Move(direction * _velocity * Time.deltaTime);
     }
 
     private bool once = true;
@@ -121,14 +119,8 @@ public class PlayerController : MonoBehaviour
         //photonView.RPC("Setup", RpcTarget.AllBuffered, HP);
     }
 
-    private void LateUpdate()
-    {
-        if (!photonView.IsMine) return;
-        characterController.Move((transform.right * Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") * transform.forward) * curSpeed * Time.deltaTime);
-        curSpeed = 0;
-    }
-
-    [PunRPC] public void Setup(float hp)
+    [PunRPC]
+    public void Setup(float hp)
     {
         HP = hp;
     }
@@ -138,7 +130,8 @@ public class PlayerController : MonoBehaviour
         photonView.RPC("Damage", RpcTarget.AllBuffered, damage);
     }
 
-    [PunRPC] public void Damage(float damage)
+    [PunRPC]
+    public void Damage(float damage)
     {
         HP -= damage * Time.deltaTime;
     }
@@ -148,7 +141,8 @@ public class PlayerController : MonoBehaviour
         photonView.RPC("Death", RpcTarget.AllBuffered);
     }
 
-    [PunRPC] public void Death()
+    [PunRPC]
+    public void Death()
     {
         isDead = true;
         playerManager.Deaths += 1;
