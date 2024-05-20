@@ -10,16 +10,17 @@ public class Launcher : MonoBehaviourPunCallbacks
     public static Launcher Instance { get; private set; }
 
     [SerializeField] private GameObject roomManagerPrefab;
-    [SerializeField] GameObject logText;
-    [SerializeField] TMPro.TMP_InputField createRoomInputField;
-    [SerializeField] TMPro.TMP_Text roomName;
-    [SerializeField] Transform roomListContent;
-    [SerializeField] GameObject roomListPrefab;
-    [SerializeField] Transform playerListContent;
-    [SerializeField] GameObject playerListPrefab;
-    [SerializeField] GameObject startGameButton;
-    [SerializeField] GameObject setupGameButton;
-    [SerializeField] TMPro.TMP_InputField changeNicknameInputField;
+    [SerializeField] private GameObject logText;
+    [SerializeField] private TMPro.TMP_InputField createRoomInputField;
+    [SerializeField] private TMPro.TMP_Text roomName;
+    [SerializeField] private Transform roomListContent;
+    [SerializeField] private GameObject roomListPrefab;
+    [SerializeField] private Transform playerListContent;
+    [SerializeField] private GameObject playerListPrefab;
+    [SerializeField] private GameObject startGameButton;
+    [SerializeField] private GameObject setupGameButton;
+    [SerializeField] private TMPro.TMP_InputField changeNicknameInputField;
+    [SerializeField] private GameObject roomMenu;
 
     private static bool isNickameChanged = false;
     private static string nickname;
@@ -36,11 +37,14 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.InRoom)
         {
             PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.Disconnect();
+            PhotonNetwork.ConnectUsingSettings();
             DontDestroyOnLoad(Instantiate(roomManagerPrefab));
         }
         else
         {
             GetComponent<MenuManager>().MenuOpen("room");
+            PhotonNetwork.CurrentRoom.IsOpen = true;
             UpdatePlayerList();
         }
     }
@@ -50,6 +54,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.F11))
         {
             Screen.fullScreen = !Screen.fullScreen;
+        }
+        if (roomMenu.activeSelf)
+        {
+            UpdatePlayerList();
         }
     }
 
@@ -176,25 +184,26 @@ public class Launcher : MonoBehaviourPunCallbacks
         foreach (Transform t in roomListContent) 
         { 
             Destroy(t.gameObject); 
+            Debug.Log("removed " + t.name);
         }
         for (int i = 0; i < roomList.Count; i++)
         {
             if (roomList[i].RemovedFromList) continue;
-            Instantiate(roomListPrefab, roomListContent).GetComponent<RoomButton>().SetUp(roomList[i]); 
+            Instantiate(roomListPrefab, roomListContent).GetComponent<RoomButton>().SetUp(roomList[i]);
+            Debug.Log("added " + roomList[i].Name);
         }
     }
 
     private void UpdatePlayerList()
     {
+        foreach (Transform t in playerListContent)
+        {
+            Destroy(t.gameObject);
+        }
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             Instantiate(playerListPrefab, playerListContent).GetComponent<PlayerText>().SetUp(player);
         }
-    }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        Instantiate(playerListPrefab, playerListContent).GetComponent<PlayerText>().SetUp(newPlayer);
     }
 
     public void StartGame()

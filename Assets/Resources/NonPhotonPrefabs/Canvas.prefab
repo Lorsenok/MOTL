@@ -1163,7 +1163,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1199880446364131471}
   m_Direction: 0
   m_MinValue: 60
-  m_MaxValue: 160
+  m_MaxValue: 120
   m_WholeNumbers: 1
   m_Value: 60
   m_OnValueChanged:
@@ -4852,6 +4852,7 @@ MonoBehaviour:
   startGameButton: {fileID: 8942957721955271433}
   setupGameButton: {fileID: 4310206662266825919}
   changeNicknameInputField: {fileID: 1753195903283948110}
+  roomMenu: {fileID: 3107818618086520225}
 --- !u!114 &2417279695118070598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13206,7 +13207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 401794c0c27ca194eb070c90fc7f435f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageExistingTime: 5
+  messageExistingTimeSet: 5
 --- !u!1 &6841920503709388415
 GameObject:
   m_ObjectHideFlags: 0

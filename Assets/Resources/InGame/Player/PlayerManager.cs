@@ -47,6 +47,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             photonView.RPC("RoomDataSet", RpcTarget.AllBuffered, RoomData.HP, RoomData.Speed, RoomData.DamageMultiplier, RoomData.Gravity, RoomData.PlayTime, RoomData.SpawnTime);
+            PhotonNetwork.CurrentRoom.IsOpen = false;
         }
         if ( photonView.IsMine )
         {

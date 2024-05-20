@@ -18,6 +18,7 @@ public class RoomButton : MonoBehaviour
 
     public void OnClick()
     {
-        Launcher.Instance.JoinRoom(roomInfo);
+        if (roomInfo.IsOpen) Launcher.Instance.JoinRoom(roomInfo);
+        else FindObjectOfType<LogText>().Message("You cant join ongoing match!");
     }
 }
