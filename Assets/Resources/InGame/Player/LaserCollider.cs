@@ -16,7 +16,13 @@ public class LaserCollider : MonoBehaviour
                 PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
                 if (pc.HP <= 0 & !pc.isDead)
                 {
-                    weapon.playerManager.Kills += 1;
+                    if (weapon != null)
+                    {
+                        if (weapon.playerManager != null)
+                        {
+                            weapon.playerManager.Kills += 1;
+                        }
+                    }
                     pc.isDead = true;
                     pc.SetDeath();
                 }

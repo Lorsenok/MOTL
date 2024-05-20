@@ -32,7 +32,7 @@ public class RoomSetup : MonoBehaviour
         RoomData.Speed = speedSlider.value;
         RoomData.DamageMultiplier = damageMultiplierSlider.value;
 
-        playTimeSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Play time (" + Mathf.Round(playTimeSlider.value).ToString() + " min)";
+        playTimeSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Play time (" + Mathf.Round(playTimeSlider.value).ToString() + " sec)";
         spawnTimeSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Spawn time (" + Mathf.Round(spawnTimeSlider.value).ToString() + " sec)";
         gravitySlider.GetComponentInChildren<TextMeshProUGUI>().text = "Gravity (" + Mathf.Round(gravitySlider.value).ToString() + ")";
         hpSlider.GetComponentInChildren<TextMeshProUGUI>().text = "HP (" + Mathf.Round(hpSlider.value).ToString() + ")";

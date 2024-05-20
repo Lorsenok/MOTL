@@ -25,6 +25,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     private static bool isNickameChanged = false;
     private static string nickname;
 
+    static private bool isFirstOpen = true;
+
     public void Awake()
     {
         Instance = this;
@@ -37,8 +39,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.InRoom)
         {
             PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.Disconnect();
-            PhotonNetwork.ConnectUsingSettings();
+            if (isFirstOpen)
+            {
+                isFirstOpen = false;
+                PhotonNetwork.Disconnect();
+                PhotonNetwork.ConnectUsingSettings();
+            }
             DontDestroyOnLoad(Instantiate(roomManagerPrefab));
         }
         else
@@ -89,7 +95,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void OnNicknameChanged()
     {
-        if (changeNicknameInputField.text.Length > 5)
+        if (changeNicknameInputField.text.Length > 100) return;
+        if (changeNicknameInputField.text.Length > 5 & changeNicknameInputField.text.Length < 21)
         {
             isNickameChanged = true;
             PhotonNetwork.NickName = changeNicknameInputField.text;
@@ -97,15 +104,16 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
         else
         {
-            logText.GetComponent<LogText>().Message("Nickname must have more than 5 symbols");
+            logText.GetComponent<LogText>().Message("Nickname must have more than 5 and less than 20 symbols");
         }
     }
 
     public void CreateRoom()
     {
-        if (createRoomInputField.text.Length <= 3) 
+        if (createRoomInputField.text.Length > 100) return;
+        if (createRoomInputField.text.Length <= 3 & changeNicknameInputField.text.Length < 2) 
         {
-            logText.GetComponent<LogText>().Message("Your room name should have more than 3 symbols");
+            logText.GetComponent<LogText>().Message("Your room must have more than 5 and less than 20 symbols");
         }
         else
         {
@@ -184,13 +192,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         foreach (Transform t in roomListContent) 
         { 
             Destroy(t.gameObject); 
-            Debug.Log("removed " + t.name);
         }
         for (int i = 0; i < roomList.Count; i++)
         {
             if (roomList[i].RemovedFromList) continue;
             Instantiate(roomListPrefab, roomListContent).GetComponent<RoomButton>().SetUp(roomList[i]);
-            Debug.Log("added " + roomList[i].Name);
         }
     }
 

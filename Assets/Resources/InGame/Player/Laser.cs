@@ -27,6 +27,11 @@ public class Laser : MonoBehaviour
     private RaycastHit hit;
     private void Update()
     {
+        if (weapon == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Vector3 direction = GetComponentInChildren<MeshRenderer>().gameObject.transform.position - weapon.LaserSpawnPoint.transform.position;
         Ray ray = new(weapon.LaserSpawnPoint.transform.position, direction.normalized);
         Physics.Raycast(ray, out hit, Mathf.Infinity, weapon.CheckRaycastLayer);

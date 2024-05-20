@@ -7,8 +7,8 @@ public class WeaponData
     public static Color LaserColor = new Color(1, 1, 1);
     public static Color LaserColorDefault = new Color(1, 1, 1);
 
-    public static float Damage = 30f;
-    public static float DamageDefault = 30f;
+    public static float Damage = 100f;
+    public static float DamageDefault = 100f;
 
     public static float Recoil = 1500f;
     public static float RecoilDefault = 1500f;
