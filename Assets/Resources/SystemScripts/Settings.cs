@@ -22,6 +22,7 @@ public class Settings : MonoBehaviour
             FOV = PlayerPrefs.GetFloat("fov");
             PostProcessing = PlayerPrefs.GetInt("postprocessing") == 1;
         }
+        else FOV = 60f;
     }
 
     public void Setup()

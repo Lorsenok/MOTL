@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController characterController;
 
     private PhotonView photonView;
-    public PlayerManager playerManager;
+    [HideInInspector] public PlayerManager playerManager;
 
     [HideInInspector] public bool canMove = true;
 

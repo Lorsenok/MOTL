@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine) return;
 
+        IsMaster = false;
         photonView.RPC("IsMasterSet", RpcTarget.AllBuffered, PhotonNetwork.IsMasterClient);
 
         if (PhotonNetwork.IsMasterClient)

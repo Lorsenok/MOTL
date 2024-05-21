@@ -53,12 +53,16 @@ public class GameRules : MonoBehaviourPunCallbacks
 
     private Player bestPlayer()
     {
-        PlayerManager player = FindObjectsOfType<PlayerManager>()[0];
-        foreach (PlayerManager pm in FindObjectsOfType<PlayerManager>())
+        if (FindObjectOfType<PlayerManager>())
         {
-            if (player.Kills < pm.Kills) player = pm;
+            PlayerManager player = FindObjectsOfType<PlayerManager>()[0];
+            foreach (PlayerManager pm in FindObjectsOfType<PlayerManager>())
+            {
+                if (player.Kills < pm.Kills) player = pm;
+            }
+            return player.GetComponent<PhotonView>().Owner;
         }
-        return player.GetComponent<PhotonView>().Owner;
+        else return null;
     }
 
     private void win(string text)
@@ -78,7 +82,7 @@ public class GameRules : MonoBehaviourPunCallbacks
         switch (RuleType)
         {
             case GameRuleType.Deathmatch:
-                if (timeFlowEnded()) win(bestPlayer().NickName + " won!");
+                if (timeFlowEnded() & bestPlayer() != null) win(bestPlayer().NickName + " won!");
                 break;
         }
 
@@ -92,7 +96,18 @@ public class GameRules : MonoBehaviourPunCallbacks
             if (timeBeforeRestart <= 0.1f)
             {
                 timeBeforeRestart = 0.1f;
-                PhotonNetwork.LoadLevel("Menu");
+                Debug.Log(PhotonNetwork.IsMasterClient);
+                Debug.Log("Leaving room");
+                Destroy(FindObjectOfType<RoomManager>().gameObject);
+                foreach (PlayerManager pm in FindObjectsOfType<PlayerManager>())
+                {
+                    pm.IsLeaving = true;
+                }
+                foreach (PhotonView _pv in FindObjectsOfType<PhotonView>())
+                {
+                    PhotonNetwork.OpCleanRpcBuffer(_pv);
+                }
+                PhotonNetwork.LeaveRoom();
                 isLoadingScene = true;
                 Time.timeScale = 1.0f;
             }

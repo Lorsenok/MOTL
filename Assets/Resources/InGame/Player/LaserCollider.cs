@@ -11,23 +11,20 @@ public class LaserCollider : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            if (!collision.gameObject.GetComponent<PhotonView>().IsMine)
+            PlayerController pc = collision.gameObject.GetComponentInParent<PlayerController>();
+            if (pc.HP <= 0 & !pc.isDead)
             {
-                PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
-                if (pc.HP <= 0 & !pc.isDead)
+                if (weapon != null)
                 {
-                    if (weapon != null)
+                    if (weapon.playerManager != null)
                     {
-                        if (weapon.playerManager != null)
-                        {
-                            weapon.playerManager.Kills += 1;
-                        }
+                        weapon.playerManager.Kills += 1;
                     }
-                    pc.isDead = true;
-                    pc.SetDeath();
                 }
-                else pc.GetDamage(weapon.damage);
+                pc.isDead = true;
+                pc.SetDeath();
             }
+            else pc.GetDamage(weapon.damage);
         }
     }
 
