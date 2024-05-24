@@ -22,7 +22,11 @@ public class Settings : MonoBehaviour
             FOV = PlayerPrefs.GetFloat("fov");
             PostProcessing = PlayerPrefs.GetInt("postprocessing") == 1;
         }
-        else FOV = 60f;
+        else
+        {
+            FOV = 60f;
+            Sensitivity = 100;
+        }
     }
 
     public void Setup()
