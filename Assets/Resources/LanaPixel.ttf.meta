@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1d5f4840375822541bc1fff686db28ed
+guid: 092ef0b63a4460f4db91991bd478703d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - PICO-8
+  - LanaPixel
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

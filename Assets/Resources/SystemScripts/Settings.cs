@@ -26,6 +26,7 @@ public class Settings : MonoBehaviour
         {
             FOV = 60f;
             Sensitivity = 100;
+            PostProcessing = true;
         }
     }
 

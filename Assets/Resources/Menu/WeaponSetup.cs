@@ -1,10 +1,6 @@
-using JetBrains.Annotations;
-using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WeaponSetup : MonoBehaviour
@@ -110,11 +106,11 @@ public class WeaponSetup : MonoBehaviour
         }
         pointsText.text = "Points left: " + Mathf.Round(points).ToString();
 
-        damageSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Damage (" + damageSlider.value.ToString() + " per sec)";
-        recoilSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Recoil (" + (recoilSlider.maxValue + recoilSlider.minValue - recoilSlider.value).ToString() + ")";
-        aimSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Aim (" + aimSlider.value.ToString() + ")";
-        sizeSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Size (" + sizeSlider.value.ToString() + ")";
-        reloadSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Reload Time (" + (reloadSlider.maxValue + reloadSlider.minValue - reloadSlider.value).ToString() + " sec)";
-        ammoSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Ammo (" + ammoSlider.value.ToString() + " sec)";
+        damageSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Damage (" + Math.Round(damageSlider.value, 2).ToString() + " per sec)";
+        recoilSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Recoil (" + Math.Round(recoilSlider.maxValue + recoilSlider.minValue - recoilSlider.value, 2).ToString() + ")";
+        aimSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Aim (" + Math.Round(aimSlider.value, 2).ToString() + ")";
+        sizeSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Size (" + Math.Round(sizeSlider.value, 2).ToString() + ")";
+        reloadSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Reload Time (" + Math.Round(reloadSlider.maxValue + reloadSlider.minValue - reloadSlider.value, 2).ToString() + " sec)";
+        ammoSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Ammo (" + Math.Round(ammoSlider.value, 2).ToString() + " sec)";
     }
 }
