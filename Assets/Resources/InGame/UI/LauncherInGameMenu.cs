@@ -10,6 +10,11 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject eventSystem;
 
+    private bool isLeaving = false;
+
+    private GameInterface gameInterface;
+    private PlayerManager pm;
+
     private void Awake()
     {
         pv = GetComponent<PhotonView>();
@@ -19,6 +24,8 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
             Destroy(eventSystem);
             return;
         }
+        gameInterface = GetComponentInChildren<GameInterface>();
+        pm = GetComponent<PlayerManager>();
     }
 
     private void OnDestroy()
@@ -28,7 +35,8 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
-        if (!pv.IsMine) return;
+        if (!pv.IsMine | isLeaving) return;
+        isLeaving = true;
         Debug.Log("Leaving room");
         Destroy(FindObjectOfType<RoomManager>().gameObject);
         foreach (PlayerManager pm in FindObjectsOfType<PlayerManager>())
@@ -47,5 +55,11 @@ public class LauncherInGameMenu : MonoBehaviourPunCallbacks
         if (!pv.IsMine) return;
         Debug.Log("Room left");
         SceneManager.LoadScene("Menu");
+    }
+
+    private void Update()
+    {
+        if (!pv.IsMine) return;
+        gameInterface.gameObject.SetActive(pm.player != null);
     }
 }

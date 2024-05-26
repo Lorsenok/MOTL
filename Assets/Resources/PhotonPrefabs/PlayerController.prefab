@@ -419,6 +419,8 @@ MonoBehaviour:
   playerManager: {fileID: 0}
   canMove: 1
   isDead: 0
+  AfterDamageTimeSet: 1
+  AfterDamageTime: 0
 --- !u!114 &8835419842579861173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,9 +445,6 @@ MonoBehaviour:
   recoil: 0
   aim: 0
   Size: 0
-  reloadTimeMax: 0
-  ammoMax: 0
-  ammo: 0
   playerManager: {fileID: 0}
 --- !u!114 &6477546970793237952
 MonoBehaviour:

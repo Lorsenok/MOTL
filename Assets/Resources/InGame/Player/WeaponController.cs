@@ -6,7 +6,7 @@ using System.IO;
 
 public class WeaponController : MonoBehaviour
 {
-    
+
     public GameObject LaserSpawnPoint;
     public LayerMask CheckRaycastLayer;
     public float DistanceWithoutObstacles;
@@ -23,12 +23,13 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private float aim;
     public float Size;
 
-    [SerializeField] private float reloadTimeMax;
-    private float reloadTime = 0;
+    public float ReloadTimeMax { get; private set; }
+    public float ReloadTime { get; set; }
+
     private bool isReloading = false;
 
-    [SerializeField] private float ammoMax;
-    [SerializeField] private float ammo;
+    public float AmmoMax { get; private set; }
+    public float Ammo { get; private set; }
 
     private PhotonView photonView;
     [HideInInspector] public PlayerManager playerManager;
@@ -39,8 +40,8 @@ public class WeaponController : MonoBehaviour
         recoil = _recoil;
         aim = _aim;
         Size = _size;
-        reloadTimeMax = _reloadTimeMax;
-        ammoMax = _ammoMax;
+        ReloadTimeMax = _reloadTimeMax;
+        AmmoMax = _ammoMax;
         laserColor = new Color(r, g, b);
     }
 
@@ -53,7 +54,7 @@ public class WeaponController : MonoBehaviour
             shootDelay -= Time.deltaTime;
         }
 
-        if (Input.GetMouseButton(0) & ammo > 0 & !isReloading & shootDelay <= 0)
+        if (Input.GetMouseButton(0) & Ammo > 0 & !isReloading & shootDelay <= 0)
         {
             if (laser == null)
             {
@@ -61,7 +62,7 @@ public class WeaponController : MonoBehaviour
                 laser.GetComponentInChildren<MeshRenderer>().material.color = laserColor;
             }
 
-            ammo -= Time.deltaTime;
+            Ammo -= Time.deltaTime;
 
             laser.transform.position = LaserSpawnPoint.transform.position;
             laser.transform.rotation = Quaternion.RotateTowards(laser.transform.rotation, LaserSpawnPoint.transform.rotation, aim * Time.deltaTime);
@@ -80,22 +81,22 @@ public class WeaponController : MonoBehaviour
 
     private void reload()
     {
-        if (ammo <= 0 | Input.GetKeyDown(KeyCode.R))
+        if (Ammo <= 0 | Input.GetKeyDown(KeyCode.R))
         {
             if (!isReloading)
             {
-                reloadTime = reloadTimeMax;
+                ReloadTime = ReloadTimeMax;
                 isReloading = true;
             }
         }
 
         if (isReloading)
         {
-            reloadTime -= Time.deltaTime;
-            if (reloadTime <= 0)
+            ReloadTime -= Time.deltaTime;
+            if (ReloadTime <= 0)
             {
                 isReloading = false;
-                ammo = ammoMax;
+                Ammo = AmmoMax;
             }
         }
     }
@@ -132,6 +133,7 @@ public class WeaponController : MonoBehaviour
     {
         photonView = GetComponent<PhotonView>();
         playerController = GetComponent<PlayerController>();
+        ReloadTime = 0;
     }
 
 }

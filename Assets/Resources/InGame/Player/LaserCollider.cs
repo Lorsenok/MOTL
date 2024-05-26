@@ -17,7 +17,7 @@ public class LaserCollider : MonoBehaviour
     private void OnTriggerStay(Collider collision)
     {
         if (collision.gameObject.tag != "Player") return;
-        if (collision.gameObject.GetComponent<PhotonView>() == null) return;
+        if (collision.gameObject.GetComponent<PhotonView>() == null | pv == null) return;
         if (collision.gameObject.GetComponent<PhotonView>().Owner == pv.Owner) return;
         PlayerController pc = collision.gameObject.GetComponentInParent<PlayerController>();
         if (pc.HP <= 0 & !pc.isDead)

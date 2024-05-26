@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool isDead = false;
 
+    public float AfterDamageTimeSet = 1;
+    [HideInInspector] public float AfterDamageTime = 0;
+
     private void Awake()
     {
         rg = GetComponent<Rigidbody>();
@@ -107,6 +110,8 @@ public class PlayerController : MonoBehaviour
             once = false;
         }
 
+        if (AfterDamageTime > 0) AfterDamageTime -= Time.deltaTime;
+
         if (isGrounded && !Input.GetKey(KeyCode.Space)) velocity = new Vector3(0, -2, 0);
         else velocity.y += Time.deltaTime * Gravity;
         characterController.Move(velocity * Time.deltaTime);
@@ -128,6 +133,7 @@ public class PlayerController : MonoBehaviour
     public void GetDamage(float damage)
     {
         photonView.RPC("Damage", RpcTarget.AllBuffered, damage);
+        AfterDamageTime = AfterDamageTimeSet;
     }
 
     [PunRPC]
