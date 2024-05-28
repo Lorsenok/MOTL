@@ -29,6 +29,17 @@ public class PlayerController : MonoBehaviour
     public float AfterDamageTimeSet = 1;
     [HideInInspector] public float AfterDamageTime = 0;
 
+    [SerializeField] private MeshRenderer Hat;
+    [SerializeField] private MeshRenderer Body;
+    [SerializeField] private MeshRenderer Head;
+
+    [SerializeField] private MeshRenderer BookCover;
+    [SerializeField] private MeshRenderer BookCrust;
+
+    [HideInInspector] public float ColorR;
+    [HideInInspector] public float ColorG;
+    [HideInInspector] public float ColorB;
+
     private void Awake()
     {
         rg = GetComponent<Rigidbody>();
@@ -93,6 +104,16 @@ public class PlayerController : MonoBehaviour
     private bool once = true;
     private void Update()
     {
+
+        Hat.materials[0].color = new Color(ColorR, ColorG, ColorB);
+        Body.materials[0].color = new Color(ColorR, ColorG, ColorB);
+        BookCover.materials[0].color = new Color(ColorR, ColorG, ColorB);
+        BookCrust.materials[0].color = new Color(ColorR - 0.2f, ColorG - 0.2f, ColorB - 0.2f);
+
+        Body.gameObject.SetActive(!photonView.IsMine);
+        Hat.gameObject.SetActive(!photonView.IsMine);
+        Head.gameObject.SetActive(!photonView.IsMine);
+
         if (isDead)
         {
             if (photonView.IsMine) playerManager.SpawnTimeCur = playerManager.SpawnTime;
@@ -104,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
         if (once) // Костыль ебаный
         {
-            photonView.RPC("Setup", RpcTarget.AllBuffered, RoomData.HP);
+            photonView.RPC("Setup", RpcTarget.AllBuffered, RoomData.HP, WeaponData.LaserColor.r, WeaponData.LaserColor.g, WeaponData.LaserColor.b);
             Gravity = RoomData.Gravity;
             Speed = RoomData.Speed;
             once = false;
@@ -125,9 +146,10 @@ public class PlayerController : MonoBehaviour
     }
 
     [PunRPC]
-    public void Setup(float hp)
+    public void Setup(float hp, float r, float g, float b)
     {
         HP = hp;
+        ColorR = r; ColorG = g; ColorB = b;
     }
 
     public void GetDamage(float damage)

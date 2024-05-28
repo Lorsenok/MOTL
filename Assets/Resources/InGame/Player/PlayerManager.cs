@@ -68,6 +68,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         return player;
     }
 
+    private bool once = false;
     private void Update()
     {
         if (!PhotonNetwork.InRoom | IsLeaving) return;
@@ -97,7 +98,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 if (pm.IsMaster)
                 {
                     RoomData.HP = pm.HP;
-                    player.HP = pm.HP;
+                    if (!once)
+                    {
+                        player.HP = pm.HP;
+                        once = true;
+                    }
                     RoomData.Speed = pm.Speed;
                     player.Speed = pm.Speed;
                     RoomData.DamageMultiplier = pm.DamageMultiplier;

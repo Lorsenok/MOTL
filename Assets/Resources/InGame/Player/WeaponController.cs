@@ -15,12 +15,9 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private float shootDelaySet;
     private float shootDelay = 0;
 
-    //На релизе все SerializeField ниже удалить!!!
-    [SerializeField] private Color laserColor;
-
     public float damage;
-    [SerializeField] private float recoil;
-    [SerializeField] private float aim;
+    private float recoil;
+    private float aim;
     public float Size;
 
     public float ReloadTimeMax { get; private set; }
@@ -34,7 +31,15 @@ public class WeaponController : MonoBehaviour
     private PhotonView photonView;
     [HideInInspector] public PlayerManager playerManager;
 
-    [PunRPC] public void Setup(float _damage, float _recoil, float _aim, float _size, float _reloadTimeMax, float _ammoMax, float r, float g, float b)
+    public float ColorR;
+    public float ColorG;
+    public float ColorB;
+
+    [SerializeField] private GameObject Book;
+    [SerializeField] private float bookRotationSpeed;
+
+    [PunRPC]
+    public void Setup(float _damage, float _recoil, float _aim, float _size, float _reloadTimeMax, float _ammoMax, float r, float g, float b)
     {
         damage = _damage;
         recoil = _recoil;
@@ -42,7 +47,7 @@ public class WeaponController : MonoBehaviour
         Size = _size;
         ReloadTimeMax = _reloadTimeMax;
         AmmoMax = _ammoMax;
-        laserColor = new Color(r, g, b);
+        ColorR = r; ColorG = g; ColorB = b;
     }
 
     private GameObject laser;
@@ -59,8 +64,10 @@ public class WeaponController : MonoBehaviour
             if (laser == null)
             {
                 laser = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Laser"), LaserSpawnPoint.transform.position, LaserSpawnPoint.transform.rotation);
-                laser.GetComponentInChildren<MeshRenderer>().material.color = laserColor;
+                laser.GetComponentInChildren<MeshRenderer>().materials[0].color = new Color(ColorR, ColorG, ColorB);
             }
+
+            Book.transform.rotation = Quaternion.Lerp(Book.transform.rotation, Quaternion.Euler(laser.transform.eulerAngles.x, laser.transform.eulerAngles.y, laser.transform.eulerAngles.z), Time.deltaTime * bookRotationSpeed);
 
             Ammo -= Time.deltaTime;
 
@@ -70,6 +77,8 @@ public class WeaponController : MonoBehaviour
         }
         else
         {
+            Book.transform.localRotation = Quaternion.Lerp(Book.transform.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * bookRotationSpeed);
+
             if (laser != null)
             {
                 PhotonNetwork.Destroy(laser);
@@ -101,12 +110,17 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
+        if (playerManager.IsLeaving) return;
+        photonView.RPC("Setup", RpcTarget.AllBuffered, WeaponData.Damage, WeaponData.Recoil, WeaponData.Aim, WeaponData.Size, WeaponData.ReloadTimeMax, WeaponData.AmmoMax, WeaponData.LaserColor.r, WeaponData.LaserColor.g, WeaponData.LaserColor.b);
+    }
+
     private void Update()
     {
         if (!photonView.IsMine | !PhotonNetwork.InRoom) return;
         if (playerManager.IsLeaving) return;
-
-        photonView.RPC("Setup", RpcTarget.AllBuffered, WeaponData.Damage, WeaponData.Recoil, WeaponData.Aim, WeaponData.Size, WeaponData.ReloadTimeMax, WeaponData.AmmoMax, WeaponData.LaserColor.r, WeaponData.LaserColor.g, WeaponData.LaserColor.b);
 
         foreach (AudioListener audio in FindObjectsOfType<AudioListener>())
         {

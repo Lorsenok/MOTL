@@ -3018,7 +3018,7 @@ MonoBehaviour:
   greenInputField: {fileID: 7531402697650389622}
   blueInputField: {fileID: 9008034638113028709}
   pointsText: {fileID: 6128873085106018384}
-  logText: {fileID: 0}
+  logText: {fileID: 7976181437467939177}
   PointsMax: 400
 --- !u!1 &2457342654925153267
 GameObject:
