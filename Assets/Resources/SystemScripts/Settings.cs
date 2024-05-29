@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Settings : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class Settings : MonoBehaviour
             {
                 player.Sensitivity = Sensitivity;
                 player.GetComponentInChildren<Camera>().fieldOfView = FOV;
+                player.GetComponentInChildren<Camera>().GetComponent<PostProcessVolume>().enabled = PostProcessing;
             }
         }
     }

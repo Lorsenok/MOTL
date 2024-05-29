@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -45,13 +46,15 @@ public class PlayerController : MonoBehaviour
         rg = GetComponent<Rigidbody>();
         photonView = GetComponent<PhotonView>();
         characterController = GetComponent<CharacterController>();
+        if (photonView.IsMine) GetComponentInChildren<Billboard>().gameObject.SetActive(false);
+        else GetComponentInChildren<Billboard>().GetComponentInChildren<TextMeshProUGUI>().text = photonView.Owner.NickName;
     }
 
     private void Start()
     {
         if (!photonView.IsMine)
         {
-            Destroy(GetComponentInChildren<Camera>());
+            GetComponentInChildren<Camera>().enabled = false;
             Destroy(rg);
         }
         if (playerManager == null)

@@ -26,7 +26,8 @@ public class GameInterface : MonoBehaviour
         }
 
         hpText.text = Math.Round(pm.player.HP).ToString();
-        ammoText.text = Math.Round(wc.Ammo, 2).ToString();
+        if (wc.Ammo > 0) ammoText.text = Math.Round(wc.Ammo, 2).ToString();
+        else ammoText.text = "0";
 
         float reloadBarScale = 1 - 1 * wc.ReloadTime / wc.ReloadTimeMax;
         reloadBar.gameObject.SetActive(reloadBarScale < 1);
