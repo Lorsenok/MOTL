@@ -64,10 +64,21 @@ public class WeaponController : MonoBehaviour
             if (laser == null)
             {
                 laser = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Laser"), LaserSpawnPoint.transform.position, LaserSpawnPoint.transform.rotation);
-                laser.GetComponentInChildren<MeshRenderer>().materials[0].color = new Color(ColorR, ColorG, ColorB);
+                laser.GetComponentInChildren<LaserCollider>().GetComponent<MeshRenderer>().materials[0].color = new Color(ColorR, ColorG, ColorB);
+
+                foreach (MeshRenderer meshRenderer in laser.GetComponentsInChildren<MeshRenderer>())
+                {
+                    if (!meshRenderer.GetComponent<LaserCollider>())
+                    {
+                        meshRenderer.materials[0].color = new Color(ColorR, ColorG, ColorB, (255 - laser.GetComponent<Laser>().OpacityMultiplier * Size) / 255);
+                        meshRenderer.gameObject.transform.localScale = new Vector3(Size+0.01f, 0.1f, Size+0.01f);
+                    }
+                }
             }
 
-            Book.transform.rotation = Quaternion.Lerp(Book.transform.rotation, Quaternion.Euler(laser.transform.eulerAngles.x, laser.transform.eulerAngles.y, laser.transform.eulerAngles.z), Time.deltaTime * bookRotationSpeed);
+
+
+        Book.transform.rotation = Quaternion.Lerp(Book.transform.rotation, Quaternion.Euler(laser.transform.eulerAngles.x, laser.transform.eulerAngles.y, laser.transform.eulerAngles.z), Time.deltaTime * bookRotationSpeed);
 
             Ammo -= Time.deltaTime;
 

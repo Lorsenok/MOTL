@@ -30,6 +30,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             OnJoinedRoom();
+            if (PlayerPrefs.HasKey("damage"))
+            {
+                WeaponData.Damage = PlayerPrefs.GetFloat("damage");
+                WeaponData.Recoil = PlayerPrefs.GetFloat("recoil");
+                WeaponData.Aim = PlayerPrefs.GetFloat("aim");
+                WeaponData.Size = PlayerPrefs.GetFloat("size");
+                WeaponData.ReloadTimeMax = PlayerPrefs.GetFloat("reload");
+                WeaponData.AmmoMax = PlayerPrefs.GetFloat("ammo");
+            }
         }
     }
 
