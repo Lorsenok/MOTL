@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 40ed9faaf969c4b41bd7faae24c00961, type: 2}
+  - {fileID: 2100000, guid: b186a6eaa62699e40b2042fd62804999, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -290,4 +290,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
-  OpacityMultiplier: 10
+  OpacityMultiplier: 15

@@ -145,6 +145,12 @@ public class PlayerController : MonoBehaviour
             jump();
             move();
         }
+
+        if (transform.position.y < -50)
+        {
+             transform.position =  GameObject.FindGameObjectsWithTag("Spawner")[Random.Range(0, GameObject.FindGameObjectsWithTag("Spawner").Length - 1)].transform.position;
+        }
+
         //photonView.RPC("Setup", RpcTarget.AllBuffered, HP);
     }
 

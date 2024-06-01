@@ -27,6 +27,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        foreach (GameObject spawner in GameObject.FindGameObjectsWithTag("Spawner"))
+        {
+            spawner.GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
+        }
+
         if (PhotonNetwork.InRoom)
         {
             OnJoinedRoom();
