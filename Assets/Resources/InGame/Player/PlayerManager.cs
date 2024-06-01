@@ -27,11 +27,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        foreach (GameObject spawner in GameObject.FindGameObjectsWithTag("Spawner"))
-        {
-            spawner.GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
-        }
-
         if (PhotonNetwork.InRoom)
         {
             OnJoinedRoom();
@@ -55,6 +50,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         if (!photonView.IsMine) return;
+        foreach (GameObject spawner in GameObject.FindGameObjectsWithTag("Spawner"))
+        {
+            spawner.GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
+        }
 
         IsMaster = false;
         photonView.RPC("IsMasterSet", RpcTarget.AllBuffered, PhotonNetwork.IsMasterClient);

@@ -15,6 +15,7 @@ public class WeaponSetup : MonoBehaviour
     [SerializeField] private TMP_InputField redInputField;
     [SerializeField] private TMP_InputField greenInputField;
     [SerializeField] private TMP_InputField blueInputField;
+    [SerializeField] private Image colorImage;
 
     [SerializeField] private TextMeshProUGUI pointsText;
 
@@ -65,10 +66,8 @@ public class WeaponSetup : MonoBehaviour
             PlayerPrefs.SetFloat("reload", WeaponData.ReloadTimeMax);
             PlayerPrefs.SetFloat("ammo", WeaponData.AmmoMax);
 
-            if (redInputField.text != string.Empty & greenInputField.text != string.Empty & blueInputField.text != string.Empty & int.Parse(redInputField.text) < 256 & int.Parse(greenInputField.text) < 256 & int.Parse(blueInputField.text) < 256)
-            {
-                WeaponData.LaserColor = new Color(float.Parse(redInputField.text) / 255, float.Parse(greenInputField.text) / 255, float.Parse(blueInputField.text) / 255);
-            }
+            if (redInputField.text != string.Empty && greenInputField.text != string.Empty && blueInputField.text != string.Empty && int.Parse(redInputField.text) < 256 && int.Parse(greenInputField.text) < 256 && int.Parse(blueInputField.text) < 256)
+                if (redInputField.text != "" && greenInputField.text != "" && blueInputField.text != "") WeaponData.LaserColor = new Color(float.Parse(redInputField.text) / 255, float.Parse(greenInputField.text) / 255, float.Parse(blueInputField.text) / 255);
         }
         else logText.GetComponent<LogText>().Message("Points needs to be more than 0");
     }
@@ -98,6 +97,9 @@ public class WeaponSetup : MonoBehaviour
             reloadSlider.value * (100 / reloadSlider.maxValue),
             ammoSlider.value * (100 / ammoSlider.maxValue),
         };
+
+        if (redInputField.text != string.Empty && greenInputField.text != string.Empty && blueInputField.text != string.Empty && int.Parse(redInputField.text) < 256 && int.Parse(greenInputField.text) < 256 && int.Parse(blueInputField.text) < 256)
+            if (redInputField.text != "" && greenInputField.text != "" && blueInputField.text != "") colorImage.color = new(float.Parse(redInputField.text) / 255, float.Parse(greenInputField.text) / 255, float.Parse(blueInputField.text) / 255);
 
         points = PointsMax;
         for (int i = 0; i < values.Length; i++)
