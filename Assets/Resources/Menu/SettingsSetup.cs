@@ -24,7 +24,7 @@ public class SettingsSetup : MonoBehaviour
 
     public void Setup()
     {
-        settings.Sensitivity = int.Parse(sensitivityInputField.text);
+        if (sensitivityInputField.text != string.Empty && sensitivityInputField.text != "") settings.Sensitivity = int.Parse(sensitivityInputField.text);
         settings.FOV = fovSlider.value;
         settings.PostProcessing = postProcessingToggle.isOn;
         PlayerPrefs.SetInt("sensitivity", settings.Sensitivity);

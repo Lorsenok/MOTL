@@ -106,7 +106,7 @@ public class WeaponSetup : MonoBehaviour
         {
             points -= values[i];
         }
-        pointsText.text = "Points left: " + Mathf.Round(points).ToString();
+        pointsText.text = "Points left: " + Math.Round(points, 2).ToString();
 
         damageSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Damage (" + Math.Round(damageSlider.value, 2).ToString() + " per sec)";
         recoilSlider.GetComponentInChildren<TextMeshProUGUI>().text = "Recoil (" + Math.Round(recoilSlider.maxValue + recoilSlider.minValue - recoilSlider.value, 2).ToString() + ")";

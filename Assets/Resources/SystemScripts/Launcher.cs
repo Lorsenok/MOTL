@@ -95,8 +95,14 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void OnNicknameChanged()
     {
+        if (changeNicknameInputField.text == "Lorsa")
+        {
+            logText.GetComponent<LogText>().Message("Nope, you are not me :3");
+            return;
+        }
+        if (changeNicknameInputField.text == string.Empty || changeNicknameInputField.text == "") return;
         if (changeNicknameInputField.text.Length > 100) return;
-        if (changeNicknameInputField.text.Length > 5 & changeNicknameInputField.text.Length < 21)
+        if (changeNicknameInputField.text.Length > 5)
         {
             isNickameChanged = true;
             PhotonNetwork.NickName = changeNicknameInputField.text;
@@ -104,16 +110,16 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
         else
         {
-            logText.GetComponent<LogText>().Message("Nickname must have more than 5 and less than 20 symbols");
+            logText.GetComponent<LogText>().Message("Nickname must have more than 5");
         }
     }
 
     public void CreateRoom()
     {
-        if (createRoomInputField.text.Length > 100) return;
-        if (createRoomInputField.text.Length <= 3 & changeNicknameInputField.text.Length < 2) 
+        if (createRoomInputField.text == string.Empty || createRoomInputField.text == "") return;
+        if (createRoomInputField.text.Length <= 3) 
         {
-            logText.GetComponent<LogText>().Message("Your room must have more than 5 and less than 20 symbols");
+            logText.GetComponent<LogText>().Message("Your room must have more than 3 symbols");
         }
         else
         {

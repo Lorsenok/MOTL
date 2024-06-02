@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerController : MonoBehaviour
 {
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour
         if (!photonView.IsMine)
         {
             GetComponentInChildren<Camera>().enabled = false;
+            GetComponentInChildren<PostProcessVolume>().enabled = false;
             Destroy(rg);
         }
         if (playerManager == null)
