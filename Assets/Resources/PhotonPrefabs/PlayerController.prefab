@@ -643,6 +643,7 @@ MonoBehaviour:
   shootDelaySet: 1
   damage: 0
   Size: 0
+  recoilDevider: 100
   playerManager: {fileID: 0}
   ColorR: 0
   ColorG: 0

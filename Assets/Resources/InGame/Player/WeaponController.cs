@@ -28,6 +28,8 @@ public class WeaponController : MonoBehaviour
     public float AmmoMax { get; private set; }
     public float Ammo { get; private set; }
 
+    [SerializeField] private float recoilDevider;
+
     private PhotonView photonView;
     [HideInInspector] public PlayerManager playerManager;
 
@@ -84,7 +86,7 @@ public class WeaponController : MonoBehaviour
 
             laser.transform.position = LaserSpawnPoint.transform.position;
             laser.transform.rotation = Quaternion.RotateTowards(laser.transform.rotation, LaserSpawnPoint.transform.rotation, aim * Time.deltaTime);
-            playerController.Push(Time.deltaTime * recoil, -transform.forward);
+            playerController.Push(recoil / recoilDevider, -transform.forward);
         }
         else
         {
